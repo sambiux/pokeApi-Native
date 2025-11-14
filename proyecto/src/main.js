@@ -1,24 +1,39 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+import mostrarRegistro from "./componentes/registro.js";
+import mostrarLogin from "./componentes/login.js";
+import mostrarOriginal from "./componentes/original.js";
+import mostrarHome from "./componentes/home.js";
+import mostrarLogout from "./componentes/logout.js";
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+import { auth } from './firebaseConfig.js';
+import { onAuthStateChanged } from 'firebase/auth';
+onAuthStateChanged(auth, (user) => {
+if (user) {
+document.getElementById("menu").innerHTML = `
+<nav>
+<button id="menuHome">Home</button>
+<button id="menuOriginal">Original</button>
+<button id="menuLogout">Logout</button>
+</nav>
+`;
+document.getElementById("menuHome").addEventListener("click",
+mostrarHome);
+document.getElementById("menuOriginal").addEventListener("click",
+mostrarOriginal);
+document.getElementById("menuLogout").addEventListener("click",
+mostrarLogout);
+mostrarHome()
+} else{
+document.getElementById("menu").innerHTML = `
+<nav>
 
-setupCounter(document.querySelector('#counter'))
+<button id="menuLogin">Login</button>
+<button id="menuRegistro">Registro</button>
+</nav>
+`;
+document.getElementById("menuLogin").addEventListener("click",
+mostrarLogin);
+document.getElementById("menuRegistro").addEventListener("click",
+mostrarRegistro);
+mostrarLogin();
+}
+})
